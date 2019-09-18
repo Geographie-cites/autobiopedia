@@ -17,7 +17,7 @@ Si des chercheurs s'affichent sur Wikipédia, d'autres chercheurs peuvent bien a
 - somme de la taille des contributions par utilisateur
 - calcul de mesures de concentration (p.ex. entropie relative)
 - détection d'un seuil à partir de la distribution de la mesure de concentration
-- CRITÈRE 1 : à faible entropie relative, le contenu d'une page est éditée par très peu de contributeurs, page candidate à l'autobiographie
+- CRITÈRE 1 : si le nombre de contributeurs est égal inférieur ou égal à 3 (l'autobiographe aura 1, 2, peut-être 3 comptes utilisateur maximum) et/ou si l'entropie relative est faible, le contenu d'une page est éditée par très peu de contributeurs, page candidate à l'autobiographie
 - sélection du petit nombre des contributeurs principaux (l'autobiographe aura 1, 2, peut-être 3 comptes utilisateur maximum)
 - extraction de l'historique des contributions des contributeurs principaux
 - somme de la taille des contributions par page
