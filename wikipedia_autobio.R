@@ -19,8 +19,7 @@ listNames
 # urlOne <- "https://fr.wikipedia.org/wiki/Emmanuel_Le_Roy_Ladurie"
 urlOne <- "https://fr.wikipedia.org/wiki/Fiona_Meadows"
 
-nameOne <- strsplit(urlOne, split = "/")[[1]]
-nameOne <- nameOne[length(nameOne)]
+nameOne <- strsplit(urlOne, split = "/")[[1]] %>% .[length(.)]
 urlOne <- paste0("https://fr.wikipedia.org/w/index.php?title=", nameOne, "&offset=&limit=1000&action=history")
 contentOne <- read_html(urlOne)
 idContribs <- contentOne %>% html_nodes("bdi") %>% html_text()
@@ -47,14 +46,9 @@ relative_entropy <- function(x){
 relative_entropy(tabContribs$SIZE)
 
 
-refContribs <- contentOne %>% 
-  html_nodes("[class='mw-usertoollinks-contribs']") %>% 
-  html_attr("href")
 
-nameContribs <- strsplit(refContribs, split = "/")[[1]]
-nameContribs <- nameContribs[length(nameContribs)]
-
-tabRefContribs <- tibble(ID = nameContribs, SIZE = paste0("https://fr.wikipedia.org", refContribs))
+refContribs <- tibble(ID = unique(idContribs), 
+                      REF = paste0("/wiki/Sp%C3%A9cial:Contributions/", unique(idContribs)))
 
 
 
