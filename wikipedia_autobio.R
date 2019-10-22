@@ -45,6 +45,22 @@ gini_coef <- function (x, corr = FALSE, na.rm = TRUE){
   else G/n
 }
 
+compute_entropy <- function(cp){
+  if(is.na(cp)){
+    result <- NA
+  } else {
+    result <- relative_entropy(cp$SIZE) 
+  }
+  return(result)
+}
+
+compute_gini <- function(cp){
+  if(is.na(cp)){
+    result <- NA
+  } else {
+    result <- gini_coef(cp$SIZE)
+  }
+}
 
 get_contribpage <- function(name, limit = 3000){
   urlOne <- paste0("https://fr.wikipedia.org/w/index.php?title=", name, "&offset=&limit=", limit, "&action=history")
@@ -74,22 +90,6 @@ get_contribpage <- function(name, limit = 3000){
   return(tabContribs)
 }
 
-compute_entropy <- function(cp){
-  if(is.na(cp)){
-    result <- NA
-  } else {
-    result <- relative_entropy(cp$SIZE) 
-  }
-  return(result)
-}
-
-compute_gini <- function(cp){
-  if(is.na(cp)){
-    result <- NA
-  } else {
-    result <- gini_coef(cp$SIZE)
-  }
-}
 
 
 # get list of academics ----
@@ -145,8 +145,7 @@ economiste <- rbind(econ20, econ21) %>% distinct()
 
 # Politologue
 polit2021 <- read_csv(paste0(prefix, "Politologue_fran%C3%A7ais", suffix))
-politologue <- clean_table(politologue)
-
+politologue <- clean_table(polit2021)
 
 listPages <- list(HIST = historien, 
                   GEOG = geographe, 
@@ -162,19 +161,20 @@ saveRDS(object = listPages, file = paste0("list_pages_", currentDate, ".Rds"))
 
 # get "histoire" ----
 
-# listCP <- lapply(historien$NAME, get_contribpage)
-listCP <- list()
-for(i in 1:nrow(historien)){
-  print(i)
-  tempCP <- get_contribpage(historien$NAME[i])
-  listCP[[length(listCP) + 1]] <- tempCP
-}
+listCP <- lapply(historien$NAME, get_contribpage)
+# listCP <- list()
+# for(i in 1:nrow(historien)){
+#   print(i)
+#   tempCP <- get_contribpage(historien$NAME[i])
+#   listCP[[length(listCP) + 1]] <- tempCP
+# }
 
 
-saveRDS(listCP, file = "listCP_historien.Rds")
+saveRDS(listCP, file = paste0("list_contrib_hist_", currentDate, ".Rds"))
 
 historien$ENTROPY <- sapply(listCP, compute_entropy)
 historien$GINI <- sapply(listCP, compute_gini)
+plot(historien$ENTROPY, historien$GINI)
 
 # for one person
 
